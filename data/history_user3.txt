@@ -1,0 +1,2 @@
+[2025-05-29 09:59:11] 用户 user3 加密文件 /home/fanjing/grep_help.txt.enc.enc 使用算法 SM4加密
+[2025-05-29 09:59:49] 接收文件 grep_help.txt.enc 成功
