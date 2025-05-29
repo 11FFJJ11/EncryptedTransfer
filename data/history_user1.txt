@@ -1,0 +1,2 @@
+[2025-05-29 09:06:37] 用户 user1 加密文件 /home/fanjing/grep_help.txt.enc 使用算法 XOR简单加密
+[2025-05-29 09:07:30] 发送文件给 user2：grep_help.txt.enc

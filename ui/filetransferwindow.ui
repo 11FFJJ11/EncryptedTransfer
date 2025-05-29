@@ -124,19 +124,6 @@
     <string>返回</string>
    </property>
   </widget>
-  <widget class="QLabel" name="statusLabel">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>370</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic; color:#4e9a06;&quot;&gt;文件发送成功!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>

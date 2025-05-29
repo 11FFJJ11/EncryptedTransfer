@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include <QString>
 #include <QMainWindow>
+#include "historywindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,6 +14,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QString username, QWidget *parent = nullptr); // 新增参数
+    HistoryWindow* getHistoryWindow() const { return historyWindow; }  // 提供访问接口
+    QString getUsername() const { return m_username; }
+
     ~MainWindow();
 
 private slots:
@@ -29,5 +33,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QString m_username; // 保存用户名，用于后续展示或权限控制
+    QString currentUsername;  // 当前登录的用户名
+    HistoryWindow *historyWindow = nullptr;  // 声明成员变量
+    
 };
 #endif // MAINWINDOW_H
