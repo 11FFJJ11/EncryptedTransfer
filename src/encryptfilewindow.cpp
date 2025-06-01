@@ -23,8 +23,10 @@ EncryptFileWindow::EncryptFileWindow(QWidget *parent, MainWindow *mainWindow) :
     m_mainWindow(mainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("文件加密");
+    this->setWindowTitle("文件加/解密");
     ui->fileLineEdit->setReadOnly(true);
+       // 连接解密按钮的点击信号和槽函数
+    connect(ui->decryptButton, &QPushButton::clicked, this, &EncryptFileWindow::on_decryptButton_clicked);
 
     // 初始化算法选择框
     ui->algoComboBox->addItem("XOR简单加密");
@@ -144,3 +146,72 @@ QByteArray EncryptFileWindow::encryptWithSM4(const QByteArray &data)
 
     return encrypted;
 }
+
+QByteArray EncryptFileWindow::decryptWithSM4(const QByteArray &data)
+{
+    unsigned char key[16] = { '1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f' };
+    unsigned char iv[16]  = { 'a','b','c','d','e','f','1','2','3','4','5','6','7','8','9','0' };
+
+    SM4_KEY sm4_key;
+    sm4_set_encrypt_key(&sm4_key, key);
+
+    QByteArray decrypted(data.size(), 0);
+
+    sm4_ctr_encrypt(&sm4_key, iv, (unsigned char*)data.constData(), data.size(), (unsigned char*)decrypted.data());
+
+    return decrypted;
+}
+
+void EncryptFileWindow::on_decryptButton_clicked()
+{
+    if (selectedFilePath.isEmpty()) {
+        QMessageBox::warning(this, "警告", "请先选择要解密的文件！");
+        return;
+    }
+
+    QFile file(selectedFilePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, "错误", "无法打开文件！");
+        return;
+    }
+
+    QByteArray content = file.readAll();
+    file.close();
+
+    QByteArray decrypted;
+    QString algo = ui->algoComboBox->currentText();
+
+    if (algo.contains("SM4")) {
+        decrypted = decryptWithSM4(content);
+    } else {
+        QMessageBox::warning(this, "提示", "当前仅支持SM4算法解密！");
+        return;
+    }
+
+    QString newPath;
+    if (selectedFilePath.endsWith(".enc")) {
+        newPath = selectedFilePath.left(selectedFilePath.length() - 4); // 去掉.enc后缀
+    } else {
+        newPath = selectedFilePath + ".dec";
+    }
+
+    QFile outFile(newPath);
+    if (!outFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, "错误", "写入解密文件失败！");
+        return;
+    }
+    outFile.write(decrypted);
+    outFile.close();
+
+    QMessageBox::information(this, "完成", "解密成功！保存路径：" + newPath);
+
+    if (m_mainWindow && m_mainWindow->getHistoryWindow()) {
+        QString record = QString("[%1] 用户 %2 解密文件 %3 使用算法 %4")
+                         .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"))
+                         .arg(m_mainWindow->getUsername())
+                         .arg(newPath)
+                         .arg(algo);
+        m_mainWindow->getHistoryWindow()->addHistoryRecord(record);
+    }
+}
+

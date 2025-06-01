@@ -1,2 +1,6 @@
 [2025-05-29 09:06:37] 用户 user1 加密文件 /home/fanjing/grep_help.txt.enc 使用算法 XOR简单加密
 [2025-05-29 09:07:30] 发送文件给 user2：grep_help.txt.enc
+[2025-05-30 10:17:41] 用户 user1 加密文件 /home/fanjing/grep_help.txt.enc 使用算法 SM4加密
+[2025-05-30 10:17:51] 用户 user1 解密文件 /home/fanjing/grep_help.txt 使用算法 SM4加密
+[2025-05-30 10:17:53] 用户 user1 解密文件 /home/fanjing/grep_help.txt 使用算法 SM4加密
+[2025-05-30 10:18:42] 发送文件给 user2：grep_help.txt.enc

@@ -2,10 +2,11 @@
 #define UTILS_H
 
 #include <QString>
-#include <QCryptographicHash>
+#include <QByteArray>
 #include <QTime>
+#include <gmssl/sm3.h>
 
-// inline 生成随机盐
+// 生成随机盐
 inline QString generateSalt(int length = 8) {
     const QString chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     QString salt;
@@ -16,11 +17,16 @@ inline QString generateSalt(int length = 8) {
     return salt;
 }
 
-// inline 哈希函数
+// 使用 GmSSL 的 SM3 哈希函数
 inline QString computeHash(const QString &salt, const QString &password) {
     QByteArray data = (salt + password).toUtf8();
-    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Sha256);
-    return QString(hash.toHex());
+
+    uint8_t digest[SM3_DIGEST_SIZE];
+    sm3_digest(reinterpret_cast<const uint8_t *>(data.constData()), data.size(), digest);
+
+    QByteArray hashResult(reinterpret_cast<const char *>(digest), SM3_DIGEST_SIZE);
+    return QString(hashResult.toHex());
 }
 
 #endif // UTILS_H
+

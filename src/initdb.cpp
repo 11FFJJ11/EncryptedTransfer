@@ -50,10 +50,6 @@ bool initDatabase()
         }
     };
 
-    insertUser("user1", "pass1");
-    insertUser("user2", "pass2");
-    insertUser("user3", "pass3");
-
     db.close();
     return true;
 }

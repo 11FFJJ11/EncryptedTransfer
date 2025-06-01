@@ -28,6 +28,8 @@ private slots:
     void on_browseButton_clicked();
     void on_encryptButton_clicked();
     void on_backButton_clicked();
+        // 新增解密按钮槽函数声明
+    void on_decryptButton_clicked();
 
 private:
     Ui::EncryptFileWindow *ui;
@@ -35,7 +37,7 @@ private:
     MainWindow *m_mainWindow;  // 保存主窗口指针，用于访问历史窗口和用户名等
 
     QString selectedFilePath;
-
+    QByteArray decryptWithSM4(const QByteArray &data);
     QByteArray encryptWithXOR(const QByteArray &data, char key);
     QByteArray encryptWithBase64(const QByteArray &data);
     QByteArray encryptWithSM4(const QByteArray &data);
